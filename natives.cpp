@@ -1,39 +1,5 @@
 #include "natives.h"
 
-static cell_t GetAllMissions(IPluginContext *pContext, const cell_t *params)
-{
-	KeyValues *pDest = g_pSM->ReadKeyValuesHandle(params[1]);
-	if (!pDest) {
-		pContext->ReportError("Invalid Handle");
-
-		return 0;
-	}
-
-	KeyValues *pResult = g_pMatchExtL4D->GetAllMissions();
-	if (pResult) {
-		*pDest = *pResult;
-	}
-
-	return !!pResult;
-}
-
-static cell_t GetAllModes(IPluginContext *pContext, const cell_t *params)
-{
-	KeyValues *pDest = g_pSM->ReadKeyValuesHandle(params[1]);
-	if (!pDest) {
-		pContext->ReportError("Invalid Handle");
-
-		return 0;
-	}
-
-	KeyValues *pResult = g_pMatchExtL4D->GetAllModes();
-	if (pResult) {
-		*pDest = *pResult;
-	}
-
-	return !!pResult;
-}
-
 static cell_t GetServerDetails(IPluginContext *pContext, const cell_t *params)
 {
 	KeyValues *pDest = g_pSM->ReadKeyValuesHandle(params[1]);
@@ -51,6 +17,23 @@ static cell_t GetServerDetails(IPluginContext *pContext, const cell_t *params)
 
 		// Clean up
 		pResult->deleteThis();
+	}
+
+	return !!pResult;
+}
+
+static cell_t GetAllMissions(IPluginContext *pContext, const cell_t *params)
+{
+	KeyValues *pDest = g_pSM->ReadKeyValuesHandle(params[1]);
+	if (!pDest) {
+		pContext->ReportError("Invalid Handle");
+
+		return 0;
+	}
+
+	KeyValues *pResult = g_pMatchExtL4D->GetAllMissions();
+	if (pResult) {
+		*pDest = *pResult;
 	}
 
 	return !!pResult;
@@ -74,7 +57,7 @@ static cell_t GetMapInfo(IPluginContext *pContext, const cell_t *params)
 		if (pKvMapOut) {
 			*pKvMapOut = *pKvMap;
 		}
-		
+
 		if (pKvMissionOut) {
 			*pKvMissionOut = *pKvMission;
 		}
@@ -104,13 +87,31 @@ static cell_t GetMapInfoByBspName(IPluginContext *pContext, const cell_t *params
 		if (pKvMapOut) {
 			*pKvMapOut = *pKvMap;
 		}
-		
+
 		if (pKvMissionOut) {
 			*pKvMissionOut = *pKvMission;
 		}
 	}
 
 	return !!pKvMap;
+}
+
+#if SOURCE_ENGINE == SE_LEFT4DEAD2
+static cell_t GetAllModes(IPluginContext *pContext, const cell_t *params)
+{
+	KeyValues *pDest = g_pSM->ReadKeyValuesHandle(params[1]);
+	if (!pDest) {
+		pContext->ReportError("Invalid Handle");
+
+		return 0;
+	}
+
+	KeyValues *pResult = g_pMatchExtL4D->GetAllModes();
+	if (pResult) {
+		*pDest = *pResult;
+	}
+
+	return !!pResult;
 }
 
 static cell_t GetGameModeInfo(IPluginContext *pContext, const cell_t *params)
@@ -132,16 +133,18 @@ static cell_t GetGameModeInfo(IPluginContext *pContext, const cell_t *params)
 
 	return !!pResult;
 }
+#endif
 
 const sp_nativeinfo_t MyNatives[] =
 {
+	{ "GetServerDetails", GetServerDetails },
 	{ "GetAllMissions", GetAllMissions },
-	{ "GetAllModes", GetAllModes },
 	{ "GetMapInfo", GetMapInfo },
 	{ "GetMapInfoByBspName", GetMapInfoByBspName },
+#if SOURCE_ENGINE == SE_LEFT4DEAD2
+	{ "GetAllModes", GetAllModes },
 	{ "GetGameModeInfo", GetGameModeInfo },
-
-	{ "GetServerDetails", GetServerDetails },
+#endif
 
 	{ NULL, NULL },
 };

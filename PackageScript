@@ -29,12 +29,12 @@ def CopyFiles(src, dest, files):
 
 # Include file
 CopyFiles('scripting/include', 'addons/sourcemod/scripting/include',
- [ 'imatchextl4d.inc', ]
+ [ 'imatchext.inc', ]
 )
 
 # Test unit file
 CopyFiles('scripting/testsuite', 'addons/sourcemod/scripting/testsuite',
- [ 'imatchextl4d.sp', ]
+ [ 'imatchext.sp', ]
 )
 
 # Copy binaries.

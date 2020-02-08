@@ -1,7 +1,9 @@
 #include <sourcemod>
 
-#define REQUIRE_EXTENSIONS
-#include <imatchextl4d>
+// Don't require natives for Left 4 Dead 1
+#undef REQUIRE_EXTENSIONS
+#define AUTOLOAD_EXTENSIONS
+#include <imatchext>
 
 public Action test_print_details(int args)
 {
@@ -20,22 +22,25 @@ public Action test_print_details(int args)
 		kv.GetString("game/mode", buffer, sizeof(buffer));
 		PrintToServer("Gamemode: %s", buffer);
 		
-		KeyValues mode_kv = new KeyValues("");
-		if (GetGameModeInfo(mode_kv, buffer)) {
-			PrintToServer(" -- Gamemode Info -- ");
-			
-			char base[64];
-			mode_kv.GetString("base", base, sizeof(base));
-			if (strcmp(buffer, base)) {
-				PrintToServer("Based on: %s", base);
+		if (GetFeatureStatus(FeatureType_Native, "GetGameModeInfo") == FeatureStatus_Available) {
+			// Only available in Left 4 Dead 2
+			KeyValues mode_kv = new KeyValues("");
+			if (GetGameModeInfo(mode_kv, buffer)) {
+				PrintToServer(" -- Gamemode Info -- ");
+				
+				char base[64];
+				mode_kv.GetString("base", base, sizeof(base));
+				if (strcmp(buffer, base)) {
+					PrintToServer("Based on: %s", base);
+				}
+				
+				PrintToServer("Max players: %d, Player zombies: %s", mode_kv.GetNum("maxplayers", 4), mode_kv.GetNum("playercontrolledzombies") > 0 ? "yes" : "no");
+				
+				PrintToServer("Single chapter: %s, Has difficulty: %s", !!mode_kv.GetNum("singlechapter") ? "yes" : "no", !!mode_kv.GetNum("hasdifficulty") ? "yes" : "no");
 			}
 			
-			PrintToServer("Max players: %d, Player zombies: %s", mode_kv.GetNum("maxplayers", 4), mode_kv.GetNum("playercontrolledzombies") > 0 ? "yes" : "no");
-			
-			PrintToServer("Single chapter: %s, Has difficulty: %s", !!mode_kv.GetNum("singlechapter") ? "yes" : "no", !!mode_kv.GetNum("hasdifficulty") ? "yes" : "no");
+			delete mode_kv;
 		}
-		
-		delete mode_kv;
 		
 		// GetMapInfo first argument requires keys:
 		// game/mode
@@ -103,6 +108,6 @@ public Plugin myinfo =
 	name = "[L4D/2] Matchmaking Extension Interface Test",
 	author = "shqke",
 	description = "Matchmaking Extension Interface test",
-	version = "1.0.1",
-	url = "https://github.com/shqke/imatchextl4d"
+	version = "1.1.0",
+	url = "https://github.com/shqke/imatchext/"
 };

@@ -1,22 +1,22 @@
 #include "extension.h"
 #include "natives.h"
 
-CMatchExtL4D g_MatchExtL4D;
-SMEXT_LINK(&g_MatchExtL4D);
+CMatchExtInterface g_MatchExtInterface;
+SMEXT_LINK(&g_MatchExtInterface);
 
 IMatchFramework *g_pMatchFramework = NULL;
 IMatchExtL4D *g_pMatchExtL4D = NULL;
 
-bool CMatchExtL4D::SDK_OnLoad(char *error, size_t maxlength, bool late)
+bool CMatchExtInterface::SDK_OnLoad(char *error, size_t maxlength, bool late)
 {
-	if (strncmp(g_pSM->GetGameFolderName(), "left4dead", 9)) {
-		strncpy(error, "Only supports Left 4 Dead and Left 4 Dead 2", maxlength);
+	if (Q_strcmp(GAME_FOLDER, smutils->GetGameFolderName())) {
+		Q_strncpy(error, "Only supports " GAME_FOLDER, maxlength);
 
 		return false;
 	}
 
 	char path[PLATFORM_MAX_PATH];
-	g_pSM->BuildPath(Path_Game, path, sizeof(path), "bin/" MATCHMAKING_DS_LIB);
+	smutils->BuildPath(Path_Game, path, sizeof(path), "bin/" MATCHMAKING_DS_LIB);
 
 	CDllDemandLoader dll(path);
 
@@ -47,32 +47,12 @@ bool CMatchExtL4D::SDK_OnLoad(char *error, size_t maxlength, bool late)
 	return true;
 }
 
-KeyValues *CMatchExtL4D::GetAllMissions()
+IMatchExtL4D *CMatchExtInterface::GetIMatchExtL4D()
 {
-	return g_pMatchExtL4D->GetAllMissions();
+	return g_pMatchExtL4D;
 }
 
-KeyValues *CMatchExtL4D::GetAllModes()
+IMatchFramework *CMatchExtInterface::GetIMatchFrameWork()
 {
-	return g_pMatchExtL4D->GetAllModes();
-}
-
-KeyValues *CMatchExtL4D::GetMapInfo(KeyValues *pSettings, KeyValues **ppMissionInfo)
-{
-	return g_pMatchExtL4D->GetMapInfo(pSettings, ppMissionInfo);
-}
-
-KeyValues *CMatchExtL4D::GetMapInfoByBspName(KeyValues *pSettings, const char *szBspMapName, KeyValues **ppMissionInfo)
-{
-	return g_pMatchExtL4D->GetMapInfoByBspName(pSettings, szBspMapName, ppMissionInfo);
-}
-
-KeyValues *CMatchExtL4D::GetGameModeInfo(const char *szGameModeName)
-{
-	return g_pMatchExtL4D->GetGameModeInfo(szGameModeName);
-}
-
-KeyValues *CMatchExtL4D::GetActiveServerDetails(KeyValues *pRequest)
-{
-	return g_pMatchFramework->GetMatchNetworkMsgController()->GetActiveServerGameDetails(pRequest);
+	return g_pMatchFramework;
 }

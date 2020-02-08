@@ -72,8 +72,11 @@ abstract_class IMatchExtL4D
 public:
 	// Get server map information for the session settings
 	virtual KeyValues * GetAllMissions() = 0;
+	virtual KeyValues * GetAllModes() = 0;
 	virtual KeyValues * GetMapInfo( KeyValues *pSettings, KeyValues **ppMissionInfo = NULL ) = 0;
 	virtual KeyValues * GetMapInfoByBspName( KeyValues *pSettings, char const *szBspMapName, KeyValues **ppMissionInfo = NULL ) = 0;
+	virtual KeyValues * GetGameModeInfo( char const *szGameModeName ) = 0;
+	virtual KeyValues * GetRandomMission( KeyValues *pSettings, uint64 dlcMask ) = 0;
 };
 
 #define IMATCHEXT_L4D_INTERFACE "IMATCHEXT_L4D_INTERFACE_001"
