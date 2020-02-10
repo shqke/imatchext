@@ -1,8 +1,4 @@
 #include <sourcemod>
-
-// Don't require natives for Left 4 Dead 1
-#undef REQUIRE_EXTENSIONS
-#define AUTOLOAD_EXTENSIONS
 #include <imatchext>
 
 public Action test_print_details(int args)
@@ -24,70 +20,70 @@ public Action test_print_details(int args)
 		
 		if (GetFeatureStatus(FeatureType_Native, "GetGameModeInfo") == FeatureStatus_Available) {
 			// Only available in Left 4 Dead 2
-			KeyValues mode_kv = new KeyValues("");
-			if (GetGameModeInfo(mode_kv, buffer)) {
+			KeyValues kvModeInfo = new KeyValues("");
+			if (GetGameModeInfo(kvModeInfo, buffer)) {
 				PrintToServer(" -- Gamemode Info -- ");
 				
 				char base[64];
-				mode_kv.GetString("base", base, sizeof(base));
+				kvModeInfo.GetString("base", base, sizeof(base));
 				if (strcmp(buffer, base)) {
 					PrintToServer("Based on: %s", base);
 				}
 				
-				PrintToServer("Max players: %d, Player zombies: %s", mode_kv.GetNum("maxplayers", 4), mode_kv.GetNum("playercontrolledzombies") > 0 ? "yes" : "no");
+				PrintToServer("Max players: %d, Player zombies: %s", kvModeInfo.GetNum("maxplayers", 4), kvModeInfo.GetNum("playercontrolledzombies") > 0 ? "yes" : "no");
 				
-				PrintToServer("Single chapter: %s, Has difficulty: %s", !!mode_kv.GetNum("singlechapter") ? "yes" : "no", !!mode_kv.GetNum("hasdifficulty") ? "yes" : "no");
+				PrintToServer("Single chapter: %s, Has difficulty: %s", !!kvModeInfo.GetNum("singlechapter") ? "yes" : "no", !!kvModeInfo.GetNum("hasdifficulty") ? "yes" : "no");
 			}
 			
-			delete mode_kv;
+			delete kvModeInfo;
 		}
 		
 		// GetMapInfo first argument requires keys:
 		// game/mode
 		// game/mission
 		// game/chapter
-		KeyValues map_kv = new KeyValues(""), mission_kv = new KeyValues("");
-		if (GetMapInfo(kv, map_kv, mission_kv)) {
-			// mission_kv is not guaranteed to change
+		KeyValues kvMapInfo = new KeyValues(""), kvMissionInfo = new KeyValues("");
+		if (GetMapInfo(kv, kvMapInfo, kvMissionInfo)) {
+			// kvMissionInfo is not guaranteed to change
 			PrintToServer(" -- Mission Info -- ");
 			
-			mission_kv.GetString("name", buffer, sizeof(buffer));
-			PrintToServer("Name: %s (%s)", buffer, mission_kv.GetNum("builtin") ? "Built In" : "Addon");
+			kvMissionInfo.GetString("name", buffer, sizeof(buffer));
+			PrintToServer("Name: %s (%s)", buffer, kvMissionInfo.GetNum("builtin") ? "Built In" : "Addon");
 			
-			mission_kv.GetString("version", buffer, sizeof(buffer));
+			kvMissionInfo.GetString("version", buffer, sizeof(buffer));
 			if (buffer[0]) {
 				PrintToServer("Version: %s", buffer);
 			}
 			
-			mission_kv.GetString("displaytitle", buffer, sizeof(buffer));
+			kvMissionInfo.GetString("displaytitle", buffer, sizeof(buffer));
 			if (buffer[0]) {
 				PrintToServer("Title: %s", buffer);
 			}
 			
-			mission_kv.GetString("description", buffer, sizeof(buffer));
+			kvMissionInfo.GetString("description", buffer, sizeof(buffer));
 			if (buffer[0]) {
 				PrintToServer("Description: %s", buffer);
 			}
 			
-			mission_kv.GetString("author", buffer, sizeof(buffer));
+			kvMissionInfo.GetString("author", buffer, sizeof(buffer));
 			if (buffer[0]) {
 				PrintToServer("Author: %s", buffer);
 			}
 			
 			PrintToServer(" -- Map Info -- ");
 			
-			map_kv.GetString("map", buffer, sizeof(buffer));
+			kvMapInfo.GetString("map", buffer, sizeof(buffer));
 			PrintToServer("Map: %s", buffer);
 			
-			map_kv.GetString("displayname", buffer, sizeof(buffer));
+			kvMapInfo.GetString("displayname", buffer, sizeof(buffer));
 			PrintToServer("Name: %s", buffer);
 			
 			kv.SetNum("game/chapter", kv.GetNum("game/chapter") + 1);
-			PrintToServer("Chapter: %d, Is final map: %s", map_kv.GetNum("chapter"), GetMapInfo(kv) ? "no" : "yes");
+			PrintToServer("Chapter: %d, Is final map: %s", kvMapInfo.GetNum("chapter"), GetMapInfo(kv) ? "no" : "yes");
 		}
 		
-		delete map_kv;
-		delete mission_kv;
+		delete kvMapInfo;
+		delete kvMissionInfo;
 	}
 	else {
 		PrintToServer("GetServerDetails returned false");

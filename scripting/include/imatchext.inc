@@ -23,21 +23,17 @@ public Extension __ext_imatchext =
 #else
 	autoload = 0,
 #endif
-#if defined REQUIRE_EXTENSIONS
-	required = 1,
-#else
 	required = 0,
-#endif
 };
 
-#if !defined REQUIRE_EXTENSIONS
 public __ext_imatchext_SetNTVOptional()
 {
+#if !defined REQUIRE_EXTENSIONS
 	MarkNativeAsOptional("GetServerDetails");
 	MarkNativeAsOptional("GetAllMissions");
 	MarkNativeAsOptional("GetMapInfo");
 	MarkNativeAsOptional("GetMapInfoByBspName");
+#endif
 	MarkNativeAsOptional("GetAllModes");
 	MarkNativeAsOptional("GetGameModeInfo");
 }
-#endif
