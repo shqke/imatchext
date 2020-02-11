@@ -3,16 +3,16 @@
 #endif
 #define _imatchext_included
 
-native bool GetServerDetails(Handle out, Handle request = null);
-native bool GetAllMissions(Handle out);
+native bool GetServerDetails(Handle kvResult, Handle kvRequest = null);
+native bool GetAllMissions(Handle kvResult);
 // request: (string) "Game/mode"; (string) "Game/campaign"; (int) "Game/chapter"
-native bool GetMapInfo(Handle request, Handle out_map = null, Handle out_mission = null);
+native bool GetMapInfo(Handle kvRequest, Handle kvMapInfo = null, Handle kvMissionInfo = null);
 // request: (string) "Game/mode"
-native bool GetMapInfoByBspName(Handle request, const char[] name, Handle out_map = null, Handle out_mission = null);
+native bool GetMapInfoByBspName(Handle kvRequest, const char[] name, Handle kvMapInfo = null, Handle kvMissionInfo = null);
 
 // Natives below are for Left 4 Dead 2 only
-native bool GetAllModes(Handle out);
-native bool GetGameModeInfo(Handle out, const char[] name);
+native bool GetAllModes(Handle kvResult);
+native bool GetGameModeInfo(Handle kvResult, const char[] name);
 
 public Extension __ext_imatchext =
 {
