@@ -8,8 +8,8 @@ builder.SetBuildFolder('package')
 # Add any folders you need to this list
 folder_list = [
   'addons/sourcemod/extensions',
+  'addons/sourcemod/scripting',
   'addons/sourcemod/scripting/include',
-  'addons/sourcemod/scripting/testsuite',
 ]
 
 # Create the distribution folder hierarchy.
@@ -27,14 +27,14 @@ def CopyFiles(src, dest, files):
     source_path = os.path.join(builder.sourcePath, src, source_file)
     builder.AddCopy(source_path, dest_entry)
 
+# Example file
+CopyFiles('scripting', 'addons/sourcemod/scripting',
+ [ 'test_imatchext.sp', ]
+)
+
 # Include file
 CopyFiles('scripting/include', 'addons/sourcemod/scripting/include',
  [ 'imatchext.inc', ]
-)
-
-# Test unit file
-CopyFiles('scripting/testsuite', 'addons/sourcemod/scripting/testsuite',
- [ 'imatchext.sp', ]
 )
 
 # Copy binaries.
