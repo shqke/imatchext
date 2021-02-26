@@ -3,30 +3,15 @@ import os, sys
 
 projectName = 'imatchext'
 
-# smsdk_ext.cpp will be automatically added later
-sourceFiles = [
+project = Extension.HL2Project(builder, projectName + '.ext')
+project.sources += [
   'extension.cpp',
   'natives.cpp',
+  os.path.join('smsdk', 'smsdk_ext.cpp'),
 ]
 
-###############
-# Make sure to edit PackageScript, which copies your files to their appropriate locations
-# Simple extensions do not need to modify past this point.
-
-project = Extension.HL2Project(builder, projectName + '.ext')
-
-if os.path.isfile(os.path.join(builder.currentSourcePath, 'sdk', 'smsdk_ext.cpp')):
-  # Use the copy included in the project
-  project.sources += [os.path.join('sdk', 'smsdk_ext.cpp')]
-else:
-  # Use the copy included with SM 1.6 and newer
-  project.sources += [os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')]
-
-project.sources += sourceFiles
-  
 for sdk_name in Extension.sdks:
   sdk = Extension.sdks[sdk_name]
-  
-  binary = Extension.HL2Config(project, projectName + '.ext.' + sdk.ext, sdk)
+  Extension.HL2Config(project, projectName + '.ext.' + sdk.ext, sdk)
 
-Extension.extensions = builder.Add(project)
+Extension.extensions += builder.Add(project)
