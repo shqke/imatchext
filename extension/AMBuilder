@@ -1,5 +1,5 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-import os, sys
+import os.path
 
 projectName = 'imatchext'
 
@@ -7,7 +7,7 @@ project = Extension.HL2Project(builder, projectName + '.ext')
 project.sources += [
   'extension.cpp',
   'natives.cpp',
-  os.path.join('smsdk', 'smsdk_ext.cpp'),
+  os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp'),
 ]
 
 for sdk_name in Extension.sdks:

@@ -1,5 +1,5 @@
 # vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
-import os
+import os.path
 
 # This is where the files will be output to
 # package is the default
@@ -28,12 +28,12 @@ def CopyFiles(src, dest, files):
     builder.AddCopy(source_path, dest_entry)
 
 # Example file
-CopyFiles('scripting', 'addons/sourcemod/scripting',
+CopyFiles('extra/scripting', 'addons/sourcemod/scripting',
  [ 'test_imatchext.sp', ]
 )
 
 # Include file
-CopyFiles('scripting/include', 'addons/sourcemod/scripting/include',
+CopyFiles('extra/scripting/include', 'addons/sourcemod/scripting/include',
  [ 'imatchext.inc', ]
 )
 

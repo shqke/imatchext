@@ -190,13 +190,13 @@ class ExtensionConfig(object):
       else:
         cxx.cxxflags += ['-Wno-deprecated']
       cxx.cflags += ['-Wno-sometimes-uninitialized']
-
-      # Work around SDK warnings.
-      if cxx.version >= 'clang-10.0':
-        cxx.cflags += [
-          '-Wno-implicit-int-float-conversion',
-          '-Wno-tautological-overlap-compare',
-        ]
+	  
+    # Work around SDK warnings.
+    if cxx.version >= 'clang-10.0':
+      cxx.cflags += [
+        '-Wno-implicit-int-float-conversion',
+        '-Wno-tautological-overlap-compare',
+      ]
 
     if have_gcc:
       cxx.cflags += ['-mfpmath=sse']
@@ -255,7 +255,7 @@ class ExtensionConfig(object):
     cxx.defines += ['_LINUX', 'POSIX']
     cxx.linkflags += ['-Wl,--exclude-libs,ALL', '-lm']
     if cxx.vendor == 'gcc':
-      cxx.linkflags += ['-static-libgcc', '-static-libstdc++']
+      cxx.linkflags += ['-static-libgcc']
     elif cxx.vendor == 'clang':
       cxx.linkflags += ['-lgcc_eh']
 
@@ -313,6 +313,11 @@ class ExtensionConfig(object):
     if compiler.like('msvc'):
       if compiler.version >= 1900:
         compiler.linkflags += ['legacy_stdio_definitions.lib']
+      # https://developercommunity.visualstudio.com/t/msvc-142328019-is-missing-include-typeinfoh/734566#T-N752563
+      # https://qiita.com/yumetodo/items/8c112fca0a8e6b47072d
+      # let include local typeinfo.h which includes typeinfo
+      if compiler.version >= 1923:
+        compiler.cxxincludes += [os.path.join(builder.currentSourcePath, 'extension', 'typeinfo_dbg')]
       compiler.defines += ['COMPILER_MSVC', 'COMPILER_MSVC32']
     else:
       compiler.defines += ['COMPILER_GCC']
@@ -336,7 +341,7 @@ class ExtensionConfig(object):
 
     dynamic_libs = []
     if builder.target_platform == 'linux':
-      if sdk.name in ['l4d2']:
+      if sdk.name == 'l4d2':
         dynamic_libs = ['libtier0_srv.so', 'libvstdlib_srv.so']
       else:
         dynamic_libs = ['libtier0.so', 'libvstdlib.so']
@@ -384,7 +389,7 @@ Extension.configure()
 
 # Add additional buildscripts here
 BuildScripts = [
-  'AMBuilder',
+  'extension/AMBuilder',
 ]
 
 if builder.backend == 'amb2':

@@ -4,12 +4,12 @@
 #include <IShareSys.h>
 #include <KeyValues.h>
 
-#include "public/matchmaking/imatchframework.h"
+#include <matchmaking/imatchframework.h>
 
 #if SOURCE_ENGINE == SE_LEFT4DEAD
-#include "public/matchmaking/l4d/imatchext_l4d.h"
+#include <matchmaking/l4d/imatchext_l4d.h>
 #elif SOURCE_ENGINE == SE_LEFT4DEAD2
-#include "public/matchmaking/l4d2/imatchext_l4d.h"
+#include <matchmaking/l4d2/imatchext_l4d.h>
 #else
 #error "Unsupported SDK"
 #endif
