@@ -1,0 +1,62 @@
+"Games"
+{
+	"#default"
+	{
+		"Keys"
+		{
+			// matchmaking_ds.so/matchmaking_ds_srv.so
+			"CMatchExtL4D::Initialize (DS)"
+			{
+				"linux"		"@_ZN12CMatchExtL4D10InitializeEv"
+			}
+		}
+	}
+
+	"left4dead"
+	{
+		"Keys"
+		{
+			"CMatchExtL4D::Initialize"
+			{
+				// matchmaking.dll
+				// 81 EC 0C 02 00 00 
+				"windows"	"\x81\xEC\x0C\x02\x00\x00"
+
+				// matchmaking.so
+				// 
+				//"linux"		""
+			}
+			
+			"CMatchExtL4D::Initialize (DS)"
+			{
+				// matchmaking_ds.dll
+				// 81 EC 0C 02 00 00 
+				"windows"	"\x81\xEC\x0C\x02\x00\x00"
+			}
+		}
+	}
+
+	"left4dead2"
+	{
+		"Keys"
+		{
+			"CMatchExtL4D::Initialize"
+			{
+				// matchmaking.dll
+				// 81 EC 0C 02 00 00 
+				"windows"	"\x81\xEC\x0C\x02\x00\x00"
+
+				// matchmaking.so
+				// 55 89 E5 57 56 53 81 EC 6C 13 00 00 C7 04 24 ? ? ? ? 
+				"linux"		"\x55\x89\xE5\x57\x56\x53\x81\xEC\x6C\x13\x00\x00\xC7\x04\x24\x2A\x2A\x2A\x2A"
+			}
+			
+			"CMatchExtL4D::Initialize (DS)"
+			{
+				// matchmaking_ds.dll
+				// 55 8B EC 81 EC 40 04 00 00 
+				"windows"	"\x55\x8B\xEC\x81\xEC\x40\x04\x00\x00"
+			}
+		}
+	}
+}

@@ -1,5 +1,6 @@
 # vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
-import os.path
+import os
+import shutil
 
 # This is where the files will be output to
 # package is the default
@@ -8,9 +9,14 @@ builder.SetBuildFolder('package')
 # Add any folders you need to this list
 folder_list = [
   'addons/sourcemod/extensions',
+  'addons/sourcemod/gamedata',
   'addons/sourcemod/scripting',
   'addons/sourcemod/scripting/include',
+  'addons/sourcemod/translations',
 ]
+
+lang_folder_list = next(os.walk(os.path.join(builder.sourcePath, 'extra/translations')))[1]
+folder_list += map(lambda dir: os.path.join('addons/sourcemod/translations', dir), lang_folder_list)
 
 # Create the distribution folder hierarchy.
 folder_map = {}
@@ -27,6 +33,16 @@ def CopyFiles(src, dest, files):
     source_path = os.path.join(builder.sourcePath, src, source_file)
     builder.AddCopy(source_path, dest_entry)
 
+# Gamedata file
+CopyFiles('extra', 'addons/sourcemod/gamedata',
+ [ 'imatchext.txt' ]
+)
+
+# Autoload file
+CopyFiles('extra', 'addons/sourcemod/extensions',
+ [ 'imatchext.autoload' ]
+)
+
 # Example file
 CopyFiles('extra/scripting', 'addons/sourcemod/scripting',
  [ 'test_imatchext.sp', ]
@@ -35,6 +51,16 @@ CopyFiles('extra/scripting', 'addons/sourcemod/scripting',
 # Include file
 CopyFiles('extra/scripting/include', 'addons/sourcemod/scripting/include',
  [ 'imatchext.inc', ]
+)
+
+# Generated translations
+target_folder = os.path.join(builder.buildFolder, 'addons/sourcemod/translations')
+if os.path.isdir(target_folder):
+  shutil.rmtree(target_folder)
+
+shutil.copytree(
+  os.path.join(builder.sourcePath, 'extra/translations'),
+  target_folder,
 )
 
 # Copy binaries.

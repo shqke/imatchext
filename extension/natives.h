@@ -3,8 +3,12 @@
 
 #include "extension.h"
 
+#include <vstdlib/IKeyValuesSystem.h>
 #include <sp_vm_api.h>
 
-extern const sp_nativeinfo_t MyNatives[];
+extern const sp_nativeinfo_t g_Natives[];
+
+extern HKeySymbol GetCurrentMode();
+extern HKeySymbol GetCurrentMission();
 
 #endif // _INCLUDE_NATIVES_H_
