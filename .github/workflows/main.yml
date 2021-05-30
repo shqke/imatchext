@@ -131,23 +131,9 @@ jobs:
           ref: l4d
           path: hl2sdk-l4d
           
-      - name: Getting langparser repository
-        uses: actions/checkout@v2
-        with:
-          path: langparser_src
-          
-      - name: Compiling langparser files
-        working-directory: langparser_src
-        run: |
-          mkdir build
-          cd build
-          python ../configure.py --enable-optimize --sm-path="${{ github.workspace }}/sourcemod-${{ matrix.sm_version }}" --mms-path="${{ github.workspace }}/metamod-${{ matrix.meta_version }}"
-          ambuild
-          
       - name: Getting own repository
         uses: actions/checkout@v2
         with:
-          repository: 'shqke/langparser'
           path: src
           
       - name: Compiling imatchext files
@@ -162,6 +148,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: imatchext-sm${{ matrix.sm_version }}-${{ matrix.os_short }}-${{ env.GITHUB_SHA_SHORT }}
-          path: |
-            src/build/package/*
-            langparser_src/build/package/*
+          path: src/build/package
