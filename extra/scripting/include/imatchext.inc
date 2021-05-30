@@ -154,13 +154,13 @@ native bool IsMissionFinalMap();
 // Helpers
 enum SurvivorSet
 {
-	SurvivorSet_L4D2 = 2,           /**< Left 4 Dead 2 and Left 4 Dead 1 characters */
-	SurvivorSet_L4D1 = 1,           /**< Left 4 Dead 1 characters */
+    SurvivorSet_L4D2 = 2,           /**< Left 4 Dead 2 and Left 4 Dead 1 characters */
+    SurvivorSet_L4D1 = 1,           /**< Left 4 Dead 1 characters */
 };
 
 enum MissionSymbol
 {
-	MissionSymbol_Invalid = -1,
+    MissionSymbol_Invalid = -1,
 };
 
 methodmap MissionSymbol
@@ -170,36 +170,36 @@ methodmap MissionSymbol
      *
      * @return              True if mission is soft disabled, false otherwise.
      */
-	property bool IsDisabled
+    property bool IsDisabled
     {
-		public native get();
-	}
-	
-	property bool IsAddon
+        public native get();
+    }
+
+    property bool IsAddon
     {
-		public native get();
-	}
-	
-	property bool AllowCola
+        public native get();
+    }
+
+    property bool AllowCola
     {
-		public native get();
-	}
-	
-	property bool NoFemaleBoomers
+        public native get();
+    }
+
+    property bool NoFemaleBoomers
     {
-		public native get();
-	}
-	
-	property bool NoCSWeapons
+        public native get();
+    }
+
+    property bool NoCSWeapons
     {
-		public native get();
-	}
-	
-	property SurvivorSet SurvivorSet
+        public native get();
+    }
+
+    property SurvivorSet SurvivorSet
     {
-		public native get();
-	}
-    
+        public native get();
+    }
+
     /**
      * Retrieves short identifier of mission, e.g. (L4D2) "L4D2C1", "L4D2C13", (L4D1) "Hospital".
      * 
@@ -207,8 +207,8 @@ methodmap MissionSymbol
      * @param maxlength     Maximum length of the value buffer.
      * @return              Number of bytes written.
      */
-	public native int GetName(char[] buffer, int maxlength);
-    
+    public native int GetName(char[] buffer, int maxlength);
+
     /**
      * Retrieves a string value for a given mission subkey.
      *  
@@ -218,36 +218,36 @@ methodmap MissionSymbol
      * @param defvalue      Optional default value to use if the key is not found.
      * @return              Number of bytes written.
      */
-	public native int GetString(const char[] key, char[] buffer, int maxlength, const char[] defvalue = NULL_STRING);
-    
+    public native int GetString(const char[] key, char[] buffer, int maxlength, const char[] defvalue = NULL_STRING);
+
     /**
      * Copies mission data into given KeyValues at the current position.
      *
      * @param kvDest        Handle to copy KeyValues data into.
      */
-	public native void Export(KeyValues kvDest);
-	
+    public native void Export(KeyValues kvDest);
+
     /**
      * Obtain first mission symbol for iteration.
      *
      * @return              First MissionSymbol.
      */
-	public static native MissionSymbol First();
-    
+    public static native MissionSymbol First();
+
     /**
      * Next mission symbol for iteration.
      *
      * @return              Next MissionSymbol.
      */
-	public native MissionSymbol Next();
-    
+    public native MissionSymbol Next();
+
     /**
      * Checks whether given MissionSymbol is valid (corresponding mission exists).
      *
      * @param key           MissionSymbol to check existence of.
      * @return              True if mission is valid, false otherwise.
      */
-	public static native bool IsValid(MissionSymbol mission);
+    public static native bool IsValid(MissionSymbol mission);
 };
 
 /**
@@ -260,7 +260,7 @@ native MissionSymbol GetMissionSymbol(const char[] name);
 
 enum ModeSymbol
 {
-	ModeSymbol_Invalid = -1,
+    ModeSymbol_Invalid = -1,
 };
 
 methodmap ModeSymbol
@@ -270,41 +270,41 @@ methodmap ModeSymbol
      *
      * @return              True if mode is soft disabled, false otherwise.
      */
-	property bool IsDisabled
+    property bool IsDisabled
     {
-		public native get();
-	}
-	
-	property ModeSymbol Base
+        public native get();
+    }
+
+    property ModeSymbol Base
     {
-		public native get();
-	}
-	
-	property bool IsAddon
+        public native get();
+    }
+
+    property bool IsAddon
     {
-		public native get();
-	}
-	
-	property int MaxPlayers
+        public native get();
+    }
+
+    property int MaxPlayers
     {
-		public native get();
-	}
-	
-	property bool HasPlayerControlledZombies
+        public native get();
+    }
+
+    property bool HasPlayerControlledZombies
     {
-		public native get();
-	}
-	
-	property bool HasConfigurableDifficultySetting
+        public native get();
+    }
+
+    property bool HasConfigurableDifficultySetting
     {
-		public native get();
-	}
-	
-	property bool IsSingleChapterMode
+        public native get();
+    }
+
+    property bool IsSingleChapterMode
     {
-		public native get();
-	}
-    
+        public native get();
+    }
+
     /**
      * Retrieves short identifier of game mode, e.g. "coop", "survival", "versus".
      * 
@@ -312,8 +312,8 @@ methodmap ModeSymbol
      * @param maxlength     Maximum length of the value buffer.
      * @return              Number of bytes written.
      */
-	public native int GetName(char[] buffer, int maxlength);
-    
+    public native int GetName(char[] buffer, int maxlength);
+
     /**
      * Retrieves a string value for a given mode subkey.
      * 
@@ -323,40 +323,40 @@ methodmap ModeSymbol
      * @param defvalue      Optional default value to use if the key is not found.
      * @return              Number of bytes written.
      */
-	public native int GetString(const char[] key, char[] buffer, int maxlength, const char[] defvalue = NULL_STRING);
-    
+    public native int GetString(const char[] key, char[] buffer, int maxlength, const char[] defvalue = NULL_STRING);
+
     /**
      * Copies mission data into given KeyValues at the current position.
      *
      * @param kvDest        Handle to copy KeyValues data into.
      */
-	public native void Export(KeyValues kvDest);
-	
-	public native int GetNumChapters(MissionSymbol mission);
-	public native bool ExportChapter(MissionSymbol mission, int chapter, KeyValues kvDest = null);
-	public native bool ExportChapterByFile(const char[] bspName, MissionSymbol &mission = MissionSymbol_Invalid, int &chapter = 0, KeyValues kvDest = null);
-	
+    public native void Export(KeyValues kvDest);
+
+    public native int GetNumChapters(MissionSymbol mission);
+    public native bool ExportChapter(MissionSymbol mission, int chapter, KeyValues kvDest = null);
+    public native bool ExportChapterByFile(const char[] bspName, MissionSymbol &mission = MissionSymbol_Invalid, int &chapter = 0, KeyValues kvDest = null);
+
     /**
      * Obtain first mode symbol for iteration.
      *
      * @return              First ModeSymbol.
      */
-	public static native ModeSymbol First();
-    
+    public static native ModeSymbol First();
+
     /**
      * Next mode symbol for iteration.
      *
      * @return              Next ModeSymbol.
      */
-	public native ModeSymbol Next();
-    
+    public native ModeSymbol Next();
+
     /**
      * Checks whether given ModeSymbol is valid (corresponding game mode exists).
      *
      * @param key           ModeSymbol to check existence of.
      * @return              True if mode is valid, false otherwise.
      */
-	public static native bool IsValid(ModeSymbol mode);
+    public static native bool IsValid(ModeSymbol mode);
 };
 
 /**
@@ -375,69 +375,69 @@ public const MissionSymbol CurrentMission;
 
 public Extension __ext_imatchext =
 {
-	name = "[L4D/2] Matchmaking Extension Interface",
-	file = "imatchext.ext",
+    name = "[L4D/2] Matchmaking Extension Interface",
+    file = "imatchext.ext",
 #if defined AUTOLOAD_EXTENSIONS
-	autoload = 1,
+    autoload = 1,
 #else
-	autoload = 0,
+    autoload = 0,
 #endif
-	required = 0,
+    required = 0,
 };
 
 public __ext_imatchext_SetNTVOptional()
 {
 #if !defined REQUIRE_EXTENSIONS
-	MarkNativeAsOptional("GetServerGameDetails");
-	MarkNativeAsOptional("GetAllMissions");
-	MarkNativeAsOptional("GetMapInfo");
-	MarkNativeAsOptional("GetMapInfoByBspName");
-	
-	MarkNativeAsOptional("IsSingleChapterMode");
-	MarkNativeAsOptional("IsCoopMode");
-	MarkNativeAsOptional("IsRealismMode");
-	MarkNativeAsOptional("IsVersusMode");
-	MarkNativeAsOptional("IsSurvivalMode");
-	MarkNativeAsOptional("IsScavengeMode");
-	MarkNativeAsOptional("HasPlayerControlledZombies");
-	MarkNativeAsOptional("HasConfigurableDifficultySetting");
-	MarkNativeAsOptional("IsFirstMapInScenario");
-	MarkNativeAsOptional("IsMissionFinalMap");
+    MarkNativeAsOptional("GetServerGameDetails");
+    MarkNativeAsOptional("GetAllMissions");
+    MarkNativeAsOptional("GetMapInfo");
+    MarkNativeAsOptional("GetMapInfoByBspName");
+
+    MarkNativeAsOptional("IsSingleChapterMode");
+    MarkNativeAsOptional("IsCoopMode");
+    MarkNativeAsOptional("IsRealismMode");
+    MarkNativeAsOptional("IsVersusMode");
+    MarkNativeAsOptional("IsSurvivalMode");
+    MarkNativeAsOptional("IsScavengeMode");
+    MarkNativeAsOptional("HasPlayerControlledZombies");
+    MarkNativeAsOptional("HasConfigurableDifficultySetting");
+    MarkNativeAsOptional("IsFirstMapInScenario");
+    MarkNativeAsOptional("IsMissionFinalMap");
 #endif
-	MarkNativeAsOptional("GetAllModes");
-	MarkNativeAsOptional("GetGameModeInfo");
-	
+    MarkNativeAsOptional("GetAllModes");
+    MarkNativeAsOptional("GetGameModeInfo");
+
 #if !defined REQUIRE_EXTENSIONS
-	MarkNativeAsOptional("MissionSymbol.GetName");
-	MarkNativeAsOptional("MissionSymbol.GetString");
-	MarkNativeAsOptional("MissionSymbol.Export");
-	MarkNativeAsOptional("MissionSymbol.IsDisabled.get");
-	MarkNativeAsOptional("MissionSymbol.IsAddon.get");
-	MarkNativeAsOptional("MissionSymbol.AllowCola.get");
-	MarkNativeAsOptional("MissionSymbol.NoFemaleBoomers.get");
-	MarkNativeAsOptional("MissionSymbol.NoCSWeapons.get");
-	MarkNativeAsOptional("MissionSymbol.SurvivorSet.get");
-	MarkNativeAsOptional("MissionSymbol.Next");
-	MarkNativeAsOptional("MissionSymbol.First");
-	MarkNativeAsOptional("MissionSymbol.IsValid");
-	MarkNativeAsOptional("GetMissionSymbol");
+    MarkNativeAsOptional("MissionSymbol.GetName");
+    MarkNativeAsOptional("MissionSymbol.GetString");
+    MarkNativeAsOptional("MissionSymbol.Export");
+    MarkNativeAsOptional("MissionSymbol.IsDisabled.get");
+    MarkNativeAsOptional("MissionSymbol.IsAddon.get");
+    MarkNativeAsOptional("MissionSymbol.AllowCola.get");
+    MarkNativeAsOptional("MissionSymbol.NoFemaleBoomers.get");
+    MarkNativeAsOptional("MissionSymbol.NoCSWeapons.get");
+    MarkNativeAsOptional("MissionSymbol.SurvivorSet.get");
+    MarkNativeAsOptional("MissionSymbol.Next");
+    MarkNativeAsOptional("MissionSymbol.First");
+    MarkNativeAsOptional("MissionSymbol.IsValid");
+    MarkNativeAsOptional("GetMissionSymbol");
 #endif
-	
-	MarkNativeAsOptional("ModeSymbol.GetName");
-	MarkNativeAsOptional("ModeSymbol.GetString");
-	MarkNativeAsOptional("ModeSymbol.Export");
-	MarkNativeAsOptional("ModeSymbol.IsDisabled.get");
-	MarkNativeAsOptional("ModeSymbol.Base.get");
-	MarkNativeAsOptional("ModeSymbol.IsAddon.get");
-	MarkNativeAsOptional("ModeSymbol.MaxPlayers.get");
-	MarkNativeAsOptional("ModeSymbol.HasPlayerControlledZombies.get");
-	MarkNativeAsOptional("ModeSymbol.HasConfigurableDifficultySetting.get");
-	MarkNativeAsOptional("ModeSymbol.IsSingleChapterMode.get");
-	MarkNativeAsOptional("ModeSymbol.GetNumChapters");
-	MarkNativeAsOptional("ModeSymbol.GetChapter");
-	MarkNativeAsOptional("ModeSymbol.GetChapterByFile");
-	MarkNativeAsOptional("ModeSymbol.Next");
-	MarkNativeAsOptional("ModeSymbol.First");
-	MarkNativeAsOptional("ModeSymbol.IsValid");
-	MarkNativeAsOptional("GetModeSymbol");
+
+    MarkNativeAsOptional("ModeSymbol.GetName");
+    MarkNativeAsOptional("ModeSymbol.GetString");
+    MarkNativeAsOptional("ModeSymbol.Export");
+    MarkNativeAsOptional("ModeSymbol.IsDisabled.get");
+    MarkNativeAsOptional("ModeSymbol.Base.get");
+    MarkNativeAsOptional("ModeSymbol.IsAddon.get");
+    MarkNativeAsOptional("ModeSymbol.MaxPlayers.get");
+    MarkNativeAsOptional("ModeSymbol.HasPlayerControlledZombies.get");
+    MarkNativeAsOptional("ModeSymbol.HasConfigurableDifficultySetting.get");
+    MarkNativeAsOptional("ModeSymbol.IsSingleChapterMode.get");
+    MarkNativeAsOptional("ModeSymbol.GetNumChapters");
+    MarkNativeAsOptional("ModeSymbol.GetChapter");
+    MarkNativeAsOptional("ModeSymbol.GetChapterByFile");
+    MarkNativeAsOptional("ModeSymbol.Next");
+    MarkNativeAsOptional("ModeSymbol.First");
+    MarkNativeAsOptional("ModeSymbol.IsValid");
+    MarkNativeAsOptional("GetModeSymbol");
 }
