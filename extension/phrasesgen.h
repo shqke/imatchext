@@ -10,6 +10,7 @@
 #include <fstream>
 #include <atomic>
 #include <chrono>
+#include <vector>
 
 class CPhrasesGenerator :
 	public ILanguageFileParserListener,
