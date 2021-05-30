@@ -147,6 +147,7 @@ jobs:
       - name: Getting own repository
         uses: actions/checkout@v2
         with:
+          repository: 'shqke/langparser'
           path: src
           
       - name: Compiling imatchext files
@@ -162,5 +163,5 @@ jobs:
         with:
           name: imatchext-sm${{ matrix.sm_version }}-${{ matrix.os_short }}-${{ env.GITHUB_SHA_SHORT }}
           path: |
-            src/build/package
-            langparser_src/build/package
+            src/build/package/*
+            langparser_src/build/package/*
