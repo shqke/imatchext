@@ -177,7 +177,7 @@ bool CExtension::SDK_OnLoad(char* error, size_t maxlength, bool late)
 	if (pIterator != NULL) {
 		do {
 			IPlugin* pPlugin = pIterator->GetPlugin();
-			if (pPlugin != NULL) {
+			if (pPlugin != NULL && pPlugin->GetStatus() <= Plugin_Loaded) {
 				CExtension::OnPluginLoaded(pPlugin);
 			}
 

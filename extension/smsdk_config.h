@@ -3,7 +3,7 @@
 
 #define SMEXT_CONF_NAME			"[L4D/2] Matchmaking Extension Interface"
 #define SMEXT_CONF_DESCRIPTION	"Exposes some methods from matchmaking extension interface to SourcePawn"
-#define SMEXT_CONF_VERSION		"1.3.0"
+#define SMEXT_CONF_VERSION		"1.3.1"
 #define SMEXT_CONF_AUTHOR		"Evgeniy \"shqke\" Kazakov"
 #define SMEXT_CONF_URL			"https://github.com/shqke/imatchext/"
 #define SMEXT_CONF_LOGTAG		"imatchext"
