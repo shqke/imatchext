@@ -174,18 +174,16 @@ bool CExtension::SDK_OnLoad(char* error, size_t maxlength, bool late)
 	}
 
 	IPluginIterator* pIterator = plsys->GetPluginIterator();
-	if (pIterator != NULL) {
-		do {
-			IPlugin* pPlugin = pIterator->GetPlugin();
-			if (pPlugin != NULL && pPlugin->GetStatus() <= Plugin_Loaded) {
-				CExtension::OnPluginLoaded(pPlugin);
-			}
+	while (pIterator->MorePlugins()) {
+		IPlugin* pPlugin = pIterator->GetPlugin();
+		if (pPlugin->GetStatus() == Plugin_Running) {
+			CExtension::OnPluginLoaded(pPlugin);
+		}
 
-			pIterator->NextPlugin();
-		} while (pIterator->MorePlugins());
-
-		pIterator->Release();
+		pIterator->NextPlugin();
 	}
+
+	pIterator->Release();
 
 	NotifyMissionReload(false);
 
