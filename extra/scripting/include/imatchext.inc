@@ -14,6 +14,14 @@
 native bool GetServerGameDetails(Handle kvDest, Handle kvRequest = null);
 
 /**
+ * Gets reservation cookie (lobby id).
+ *
+ * @param xuidReserve   Array to store the 64bit reservation cookie in.
+ * @return              False if internal error.
+ */
+native bool GetReservationCookie(int cookie[2]);
+
+/**
  * Copies missions information into given KeyValues at the current position.
  *
  * @param kvDest        Handle to copy KeyValues data into.

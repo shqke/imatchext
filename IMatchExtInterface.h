@@ -44,6 +44,7 @@ namespace SourceMod
 	public:
 		virtual IMatchExtL4D *GetIMatchExtL4D() = 0;
 		virtual IMatchFramework *GetIMatchFrameWork() = 0;
+		virtual bool GetReservationCookie(uint64_t& xuidReserve) = 0;
 
 		virtual void AddListener(IMatchExtListener* pListener) = 0;
 		virtual void RemoveListener(IMatchExtListener* pListener) = 0;

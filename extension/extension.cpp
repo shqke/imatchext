@@ -1,10 +1,12 @@
 #include "extension.h"
 #include "natives.h"
+#include "wrappers.h"
 
 #include <byteswap.h>
 #include <sm_platform.h>
 #include <amtl/os/am-shared-library.h>
 #include <CDetour/detours.h>
+#include <extensions/ISDKTools.h>
 
 #include <memory>
 #include <cstring>
@@ -18,6 +20,8 @@
 CExtension g_Extension;
 SMEXT_LINK(&g_Extension);
 
+ISDKTools* sdktools = NULL;
+CBaseServer* g_pGameServer = NULL;
 ILanguageFileParser* g_pLanguageFileParser = NULL;
 IFileSystem* g_pFullFileSystem = NULL;
 IMatchFramework* g_pMatchFramework = NULL;
@@ -27,6 +31,8 @@ IForward* g_fwdOnMissionCacheReload = NULL;
 
 void* pfn_CMatchExtL4D_Initialize = NULL;
 CDetour* detour_CMatchExtL4D_Initialize = NULL;
+
+int CBaseServer::offset_m_nReservationCookie = 0;
 
 HKeySymbol g_iCurrentModeSymbol = INVALID_KEY_SYMBOL;
 HKeySymbol g_iCurrentMissionSymbol = INVALID_KEY_SYMBOL;
@@ -188,11 +194,14 @@ bool CExtension::SDK_OnLoad(char* error, size_t maxlength, bool late)
 	NotifyMissionReload(false);
 
 	plsys->AddPluginsListener(this);
+
+	sharesys->AddDependency(myself, "sdktools.ext", true, true);
+	sharesys->AddDependency(myself, "langparser.ext", false, true);
+
 	sharesys->AddNatives(myself, g_Natives);
 	sharesys->AddInterface(myself, this);
 	sharesys->RegisterLibrary(myself, "imatchext");
 
-	sharesys->AddDependency(myself, "langparser.ext", false, true);
 	ConVar_Register(0, this);
 
 	return true;
@@ -223,11 +232,25 @@ void CExtension::SDK_OnUnload()
 void CExtension::SDK_OnAllLoaded()
 {
 	SM_GET_LATE_IFACE(ILANGPARSER, g_pLanguageFileParser);
+	SM_GET_LATE_IFACE(SDKTOOLS, sdktools);
+
+	if (sdktools != NULL) {
+		g_pGameServer = CBaseServer::FromIServer(sdktools->GetIServer());
+		if (g_pGameServer == NULL) {
+			smutils->LogError(myself, "Unable to retrieve sv instance pointer!");
+			return;
+		}
+	}
 }
 
 bool CExtension::QueryInterfaceDrop(SMInterface* pInterface)
 {
-	return true;
+	if (sdktools == pInterface) {
+		// Unload if sv couldn't be retrieved
+		return g_pGameServer != NULL;
+	}
+
+	return IExtensionInterface::QueryInterfaceDrop(pInterface);
 }
 
 void CExtension::NotifyInterfaceDrop(SMInterface* pInterface)
@@ -236,6 +259,17 @@ void CExtension::NotifyInterfaceDrop(SMInterface* pInterface)
 		CPhrasesGenerator::SDK_OnUnload();
 		g_pLanguageFileParser = NULL;
 	}
+
+	if (sdktools == pInterface && g_pGameServer == NULL) {
+		SDK_OnUnload();
+	}
+}
+
+bool CExtension::QueryRunning(char* error, size_t maxlength)
+{
+	SM_CHECK_IFACE(SDKTOOLS, sdktools);
+
+	return true;
 }
 
 bool CExtension::SDK_OnMetamodLoad(ISmmAPI* ismm, char* error, size_t maxlen, bool late)
@@ -250,6 +284,11 @@ bool CExtension::SDK_OnMetamodLoad(ISmmAPI* ismm, char* error, size_t maxlen, bo
 
 bool CExtension::SetupFromGameConfig(IGameConfig* gc, char* error, int maxlength)
 {
+	if (!gc->GetOffset("CBaseServer::m_nReservationCookie", &CBaseServer::offset_m_nReservationCookie)) {
+		V_snprintf(error, maxlength, "Unable to get offset for \"CBaseServer::m_nReservationCookie\" from game config (file: \"" GAMEDATA_FILE ".txt\")");
+		return false;
+	}
+
 	const char* pszKey = "CMatchExtL4D::Initialize";
 	if (engine->IsDedicatedServer()) {
 		pszKey = "CMatchExtL4D::Initialize (DS)";
@@ -456,6 +495,16 @@ IMatchExtL4D* CExtension::GetIMatchExtL4D()
 IMatchFramework* CExtension::GetIMatchFrameWork()
 {
 	return g_pMatchFramework;
+}
+
+bool CExtension::GetReservationCookie(uint64_t& xuidReserve)
+{
+	if (g_pGameServer != NULL) {
+		xuidReserve = g_pGameServer->GetReservationCookie();
+		return true;
+	}
+
+	return false;
 }
 
 void CExtension::AddListener(IMatchExtListener* listener)

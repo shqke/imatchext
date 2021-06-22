@@ -88,6 +88,16 @@ public Action test_imatchext_flat(int args)
     if (GetServerGameDetails(kv)) {
         PrintToServer(" -- Server Info -- ");
         
+        int cookie[2];
+        if (GetReservationCookie(cookie)) {
+            if (cookie[1] != 0) {
+                PrintToServer("Reserved: 0x%08X%08X", cookie[1], cookie[0]);
+            }
+            else {
+                PrintToServer("Not reserved");
+            }
+        }
+        
         kv.GetString("server/adronline", buffer, sizeof(buffer));
         PrintToServer("IP Address: %s", buffer);
         

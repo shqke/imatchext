@@ -42,6 +42,7 @@ private:
 public: // IMatchExtInterface
 	IMatchExtL4D* GetIMatchExtL4D() override;
 	IMatchFramework* GetIMatchFrameWork() override;
+	bool GetReservationCookie(uint64_t& xuidReserve) override;
 
 	void AddListener(IMatchExtListener* pListener) override;
 	void RemoveListener(IMatchExtListener* pListener) override;
@@ -156,6 +157,15 @@ public: // IExtensionInterface
 	 *							it can be verified to match an existing
 	 */
 	void NotifyInterfaceDrop(SMInterface* pInterface) override;
+
+	/**
+	 * @brief Return false to tell Core that your extension should be considered unusable.
+	 *
+	 * @param error				Error buffer.
+	 * @param maxlength			Size of error buffer.
+	 * @return					True on success, false otherwise.
+	 */
+	bool QueryRunning(char* error, size_t maxlength) override;
 };
 
 #endif // _INCLUDE_IMATCHEXT_EXT_H_

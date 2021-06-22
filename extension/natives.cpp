@@ -1,4 +1,5 @@
 #include "natives.h"
+#include "wrappers.h"
 
 #include <memory>
 
@@ -242,6 +243,22 @@ static cell_t GetServerGameDetails(IPluginContext* pContext, const cell_t* param
 	auto pkvDetails = GetServerGameDetails(pkvRequest);
 	if (pkvDetails != NULL) {
 		*pkvDest = *pkvDetails;
+		return 1;
+	}
+
+	return 0;
+}
+
+static cell_t GetReservationCookie(IPluginContext* pContext, const cell_t* params)
+{
+	cell_t* pxuidReserve = NULL;
+	if (Param_GetCellPtr(pContext, params[1], &pxuidReserve) != SP_ERROR_NONE) {
+		return 0;
+	}
+
+	extern CBaseServer* g_pGameServer;
+	if (g_pGameServer != NULL) {
+		*(uint64_t*)pxuidReserve = g_pGameServer->GetReservationCookie();
 		return 1;
 	}
 
@@ -1001,6 +1018,7 @@ static cell_t GetMissionSymbol(IPluginContext* pContext, const cell_t* params)
 const sp_nativeinfo_t g_Natives[] =
 {
 	{ "GetServerGameDetails", GetServerGameDetails },
+	{ "GetReservationCookie", GetReservationCookie },
 	{ "GetAllMissions", GetAllMissions },
 	{ "GetMapInfo", GetMapInfo },
 	{ "GetMapInfoByBspName", GetMapInfoByBspName },
