@@ -393,7 +393,7 @@ public Extension __ext_imatchext =
     required = 0,
 };
 
-public __ext_imatchext_SetNTVOptional()
+public void __ext_imatchext_SetNTVOptional()
 {
 #if !defined REQUIRE_EXTENSIONS
     MarkNativeAsOptional("GetServerGameDetails");
