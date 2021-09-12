@@ -103,12 +103,6 @@ jobs:
           ref: ${{ matrix.meta_branch }}
           path: metamod-${{ matrix.meta_version }}
           
-      - name: Getting AMBuild
-        uses: actions/checkout@v2
-        with:
-          repository: alliedmodders/ambuild
-          path: ambuild
-          
       - name: Setting up Python
         uses: actions/setup-python@v2
         

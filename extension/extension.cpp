@@ -530,15 +530,21 @@ void CExtension::OnPluginLoaded(IPlugin* plugin)
 		return;
 	}
 
-	PubVars_t pubVars = { NULL };
+	PubVars_t pubVars = { NULL, NULL };
 
 	uint32_t index = 0;
 	if (pPluginRuntime->FindPubvarByName("CurrentMode", &index) == SP_ERROR_NONE) {
 		pPluginRuntime->GetPubvarByIndex(index, &pubVars.m_pCurModeVar);
+		if (pubVars.m_pCurModeVar != NULL) {
+			*pubVars.m_pCurModeVar->offs = g_iCurrentModeSymbol;
+		}
 	}
 
 	if (pPluginRuntime->FindPubvarByName("CurrentMission", &index) == SP_ERROR_NONE) {
 		pPluginRuntime->GetPubvarByIndex(index, &pubVars.m_pCurMissionVar);
+		if (pubVars.m_pCurMissionVar != NULL) {
+			*pubVars.m_pCurMissionVar->offs = g_iCurrentMissionSymbol;
+		}
 	}
 
 	if (pubVars.m_pCurModeVar != NULL || pubVars.m_pCurMissionVar != NULL) {
