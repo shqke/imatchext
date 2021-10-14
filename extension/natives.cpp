@@ -379,7 +379,7 @@ static cell_t GetAllModes(IPluginContext* pContext, const cell_t* params)
 static cell_t GetGameModeInfo(IPluginContext* pContext, const cell_t* params)
 {
 	KeyValues* pkvDest = NULL;
-	if (Param_GetKeyValues(pContext, params[1], &pkvDest, false) != SP_ERROR_NONE) {
+	if (Param_GetKeyValues(pContext, params[1], &pkvDest, true) != SP_ERROR_NONE) {
 		return 0;
 	}
 
@@ -389,12 +389,15 @@ static cell_t GetGameModeInfo(IPluginContext* pContext, const cell_t* params)
 	}
 
 	KeyValues* pkvMode = g_pMatchExtL4D->GetGameModeInfo(pszName);
-	if (pkvMode != NULL) {
-		*pkvDest = *pkvMode;
-		return 1;
+	if (pkvMode == NULL) {
+		return 0;
 	}
 
-	return 0;
+	if (pkvDest != NULL) {
+		*pkvDest = *pkvMode;
+	}
+
+	return 1;
 }
 #endif
 
