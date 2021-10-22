@@ -317,13 +317,13 @@ static cell_t GetMapInfo(IPluginContext* pContext, const cell_t* params)
 
 static cell_t GetMapInfoByBspName(IPluginContext* pContext, const cell_t* params)
 {
-	const char* pszMode = NULL;
-	if (Param_GetModeStringPtr(pContext, params[1], &pszMode) != SP_ERROR_NONE) {
+	const char* pszBSPName = NULL;
+	if (Param_GetStringPtr(pContext, params[1], &pszBSPName, false) != SP_ERROR_NONE) {
 		return 0;
 	}
 
-	const char* pszBSPName = NULL;
-	if (Param_GetStringPtr(pContext, params[2], &pszBSPName, false) != SP_ERROR_NONE) {
+	const char* pszMode = NULL;
+	if (Param_GetModeStringPtr(pContext, params[2], &pszMode) != SP_ERROR_NONE) {
 		return 0;
 	}
 
