@@ -86,7 +86,7 @@ ParseAction_t CPhrasesGenerator::State_KeyValue(const char* pszKey, const char* 
 			char ch = *(pch++);
 			if (ch == '%' && *pch == 's' && isdigit(*(pch + 1)) != 0) {
 				if (bHadFormat) {
-					m_Out << ",{" << ":s}";
+					m_Out << ",{" << *(pch + 1) << ":s}";
 				}
 				else {
 					bHadFormat = true;
