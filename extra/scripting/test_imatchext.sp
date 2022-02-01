@@ -3,6 +3,11 @@
 // #undef REQUIRE_EXTENSIONS
 #include <imatchext>
 
+public void OnMissionCacheReload()
+{
+    PrintToServer("Mission cache reloaded");
+}
+
 public Action test_imatchext(int args)
 {
     char buffer[32];

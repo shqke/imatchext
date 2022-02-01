@@ -3,6 +3,8 @@
 #endif
 #define _imatchext_included
 
+forward void OnMissionCacheReload();
+
 /**
  * Copies game server details information into given KeyValues at the current position.
  *
