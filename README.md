@@ -10,7 +10,7 @@ Requirements
 ------
 - [MM:Source (1.10+)](https://www.sourcemm.net/)
 - [SourceMod (1.8+)](https://www.sourcemod.net/)
-- (optional) langparser.ext
+- (optional) [langparser.ext](https://github.com/shqke/langparser)
 
 Supported Games
 ------
