@@ -75,7 +75,7 @@ jobs:
           
       - name: Add msbuild to PATH (Windows)
         if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v1.1
         
       - name: Install (Windows)
         if: runner.os == 'Windows'
