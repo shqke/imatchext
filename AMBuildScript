@@ -232,6 +232,9 @@ class ExtensionConfig(object):
       '-Wno-register',
       '-fvisibility-inlines-hidden',
     ]
+    cxx.linkflags += [
+      '-static-libstdc++'
+    ]
 
     have_gcc = cxx.family == 'gcc'
     have_clang = cxx.family == 'clang'
@@ -261,10 +264,10 @@ class ExtensionConfig(object):
 
     # Work around SDK warnings.
     if cxx.version >= 'clang-10.0' or cxx.version >= 'apple-clang-12.0':
-        cxx.cflags += [
-            '-Wno-implicit-int-float-conversion',
-            '-Wno-tautological-overlap-compare',
-        ]
+      cxx.cflags += [
+        '-Wno-implicit-int-float-conversion',
+        '-Wno-tautological-overlap-compare',
+      ]
 
     if have_gcc:
       cxx.cflags += ['-mfpmath=sse']
