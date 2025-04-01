@@ -115,15 +115,16 @@ jobs:
       - name: Getting own repository
         uses: actions/checkout@v4
         with:
-          path: src
+          path: extension
+          submodules: recursive
           
       - name: Compiling imatchext files
         shell: bash
-        working-directory: src
+        working-directory: extension
         run: |
           mkdir build
           cd build
-          python \
+          python3 \
             ../configure.py \
             --enable-optimize \
             --sm-path="${{ github.workspace }}/sourcemod-${{ matrix.sm_version }}"\
@@ -134,4 +135,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: imatchext-sm${{ matrix.sm_version }}-${{ matrix.os_short }}-${{ env.GITHUB_SHA_SHORT }}
-          path: src/build/package
+          path: extension/build/package
