@@ -29,6 +29,7 @@ jobs:
           - "1.9"
           - "1.10"
           - "1.11"
+          - "1.12"
           - "latest"
           
         include:
@@ -51,6 +52,9 @@ jobs:
             
           - sm_version: "1.11"
             sm_branch: "1.11-dev"
+            
+          - sm_version: "1.12"
+            sm_branch: "1.12-dev"
             
           - os: ubuntu-22.04
             os_short: oldlinux
