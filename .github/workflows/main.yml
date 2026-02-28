@@ -22,13 +22,14 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - ubuntu-20.04
+          - ubuntu-22.04
           - windows-latest
           
         sm_version:
           - "1.9"
           - "1.10"
           - "1.11"
+          - "1.12"
           - "latest"
           
         include:
@@ -52,7 +53,10 @@ jobs:
           - sm_version: "1.11"
             sm_branch: "1.11-dev"
             
-          - os: ubuntu-20.04
+          - sm_version: "1.12"
+            sm_branch: "1.12-dev"
+            
+          - os: ubuntu-22.04
             os_short: oldlinux
             
           - os: windows-latest
@@ -91,7 +95,7 @@ jobs:
       - name: Setting up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: 3.12
         
       - name: Getting ambuild
         run: |
