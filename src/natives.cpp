@@ -125,6 +125,11 @@ inline int Param_GetCellPtr(IPluginContext* pContext, cell_t param, cell_t** pps
 	return SP_ERROR_NONE;
 }
 
+inline bool IsValidKeyValuesMode(KeyValues *pkvMode)
+{
+	return pkvMode->FindKey("CfgFile") != nullptr;
+}
+
 inline int Param_GetKeyValuesMode(IPluginContext* pContext, cell_t keySymbol, KeyValues** ppkvMode)
 {
 #if SOURCE_ENGINE == SE_LEFT4DEAD2
@@ -144,6 +149,14 @@ inline int Param_GetKeyValuesMode(IPluginContext* pContext, cell_t keySymbol, Ke
 		}
 
 		return SP_ERROR_PARAM;
+	}
+
+	if (!IsValidKeyValuesMode(pkvMode)) {
+		if (pContext != NULL) {
+			pContext->ReportError("Invalid Mode KeyValues \"%u\"", keySymbol);
+		}
+
+		return SP_ERROR_FILE_FORMAT;
 	}
 
 	if (ppkvMode != NULL) {
@@ -181,6 +194,11 @@ inline int Param_GetModeStringPtr(IPluginContext* pContext, cell_t addr, const c
 	return SP_ERROR_NONE;
 }
 
+inline bool IsValidKeyValuesMission(KeyValues *pkvMission)
+{
+	return pkvMission->FindKey("Name") != nullptr; // "CfgFile" is okay though I guess
+}
+
 inline int Param_GetKeyValuesMission(IPluginContext* pContext, cell_t keySymbol, KeyValues** ppkvMission)
 {
 	KeyValues* pkvMissions = g_pMatchExtL4D->GetAllMissions();
@@ -199,6 +217,14 @@ inline int Param_GetKeyValuesMission(IPluginContext* pContext, cell_t keySymbol,
 		}
 
 		return SP_ERROR_PARAM;
+	}
+
+	if (!IsValidKeyValuesMission(pkvMission)) {
+		if (pContext != NULL) {
+			pContext->ReportError("Invalid Mission KeyValues \"%u\"", keySymbol);
+		}
+
+		return SP_ERROR_FILE_FORMAT;
 	}
 
 	if (ppkvMission != NULL) {
@@ -789,12 +815,15 @@ static cell_t ModeSymbol_First(IPluginContext* pContext, const cell_t* params)
 		return INVALID_KEY_SYMBOL;
 	}
 
-	KeyValues* pkvMode = pkvModes->GetFirstTrueSubKey();
-	if (pkvMode == NULL) {
-		return INVALID_KEY_SYMBOL;
+	for (KeyValues *pkvMode = pkvModes->GetFirstTrueSubKey();
+		 pkvMode != NULL;
+		 pkvMode = pkvMode->GetNextTrueSubKey())
+	{
+		if (IsValidKeyValuesMode(pkvMode))
+			return pkvMode->GetNameSymbol();
 	}
 
-	return pkvMode->GetNameSymbol();
+	return INVALID_KEY_SYMBOL;
 }
 
 static cell_t ModeSymbol_Next(IPluginContext* pContext, const cell_t* params)
@@ -808,12 +837,15 @@ static cell_t ModeSymbol_Next(IPluginContext* pContext, const cell_t* params)
 		return 0;
 	}
 
-	KeyValues* pkvNext = pkvMode->GetNextTrueSubKey();
-	if (pkvNext == NULL) {
-		return INVALID_KEY_SYMBOL;
+	for (KeyValues *pkvNext = pkvMode->GetNextTrueSubKey();
+		 pkvNext != NULL;
+		 pkvNext = pkvNext->GetNextTrueSubKey())
+	{
+		if (IsValidKeyValuesMode(pkvNext))
+			return pkvNext->GetNameSymbol();
 	}
 
-	return pkvNext->GetNameSymbol();
+	return INVALID_KEY_SYMBOL;
 }
 
 static cell_t GetModeSymbol(IPluginContext* pContext, const cell_t* params)
@@ -831,7 +863,7 @@ static cell_t GetModeSymbol(IPluginContext* pContext, const cell_t* params)
 	}
 
 	KeyValues* pkvMode = g_pMatchExtL4D->GetGameModeInfo(pszName);
-	if (pkvMode == NULL) {
+	if (pkvMode == NULL || !IsValidKeyValuesMode(pkvMode)) {
 		return INVALID_KEY_SYMBOL;
 	}
 
@@ -967,12 +999,15 @@ static cell_t MissionSymbol_First(IPluginContext* pContext, const cell_t* params
 		return INVALID_KEY_SYMBOL;
 	}
 
-	KeyValues* pkvMission = pkvMissions->GetFirstTrueSubKey();
-	if (pkvMission == NULL) {
-		return INVALID_KEY_SYMBOL;
+	for (KeyValues *pkvMission = pkvMissions->GetFirstTrueSubKey();
+		 pkvMission != NULL;
+		 pkvMission = pkvMission->GetNextTrueSubKey())
+	{
+		if (IsValidKeyValuesMission(pkvMission))
+			return pkvMission->GetNameSymbol();
 	}
 
-	return pkvMission->GetNameSymbol();
+	return INVALID_KEY_SYMBOL;
 }
 
 static cell_t MissionSymbol_Next(IPluginContext* pContext, const cell_t* params)
@@ -986,12 +1021,15 @@ static cell_t MissionSymbol_Next(IPluginContext* pContext, const cell_t* params)
 		return 0;
 	}
 
-	KeyValues* pkvNext = pkvMission->GetNextTrueSubKey();
-	if (pkvNext == NULL) {
-		return INVALID_KEY_SYMBOL;
+	for (KeyValues *pkvNext = pkvMission->GetNextTrueSubKey();
+		 pkvNext != NULL;
+		 pkvNext = pkvNext->GetNextTrueSubKey())
+	{
+		if (IsValidKeyValuesMission(pkvNext))
+			return pkvNext->GetNameSymbol();
 	}
 
-	return pkvNext->GetNameSymbol();
+	return INVALID_KEY_SYMBOL;
 }
 
 static cell_t GetMissionSymbol(IPluginContext* pContext, const cell_t* params)
@@ -1011,7 +1049,7 @@ static cell_t GetMissionSymbol(IPluginContext* pContext, const cell_t* params)
 	}
 
 	KeyValues* pkvMission = pkvMissions->FindKey(KeyValuesSystem()->GetSymbolForString(pszName, false));
-	if (pkvMission != NULL) {
+	if (pkvMission != NULL && IsValidKeyValuesMission(pkvMission)) {
 		return pkvMission->GetNameSymbol();
 	}
 
