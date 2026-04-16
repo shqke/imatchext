@@ -127,7 +127,8 @@ inline int Param_GetCellPtr(IPluginContext* pContext, cell_t param, cell_t** pps
 
 inline bool IsValidKeyValuesMode(KeyValues *pkvMode)
 {
-	return pkvMode->FindKey("CfgFile") != nullptr;
+	return pkvMode->FindKey("addon") != nullptr;	// seems both "addon" and "vanilla" are destined to be present,
+													// not sure about "Missions"
 }
 
 inline int Param_GetKeyValuesMode(IPluginContext* pContext, cell_t keySymbol, KeyValues** ppkvMode)
@@ -196,7 +197,7 @@ inline int Param_GetModeStringPtr(IPluginContext* pContext, cell_t addr, const c
 
 inline bool IsValidKeyValuesMission(KeyValues *pkvMission)
 {
-	return pkvMission->FindKey("Name") != nullptr; // "CfgFile" is okay though I guess
+	return pkvMission->FindKey("Name") != nullptr; // a lot of must-be-exist keys, but "Name" is good enough.
 }
 
 inline int Param_GetKeyValuesMission(IPluginContext* pContext, cell_t keySymbol, KeyValues** ppkvMission)
